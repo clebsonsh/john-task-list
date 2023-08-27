@@ -11,7 +11,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return is_null($this->task->deleted_at);
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user' => ['required', 'string', 'min:3', 'max:255'],
+            'title' => ['required', 'string', 'unique:tasks,title,' . $this->task->id . ',id,deleted_at,NULL', 'min:3', 'max:255'],
+            'description' => ['required', 'string', 'min:3', 'max:65535'],
+            'completed' => ['required', 'boolean'],
         ];
     }
 }

@@ -11,7 +11,7 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,10 +19,13 @@ class StoreTaskRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'user' => ['required', 'string', 'min:3', 'max:255'],
+            'title' => ['required', 'string', 'unique:tasks,title,NULL,id,deleted_at,NULL', 'min:3', 'max:255'],
+            'description' => ['required', 'string', 'min:3', 'max:65535'],
+            'completed' => ['required', 'boolean'],
         ];
     }
 }

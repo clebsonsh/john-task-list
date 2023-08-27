@@ -6,6 +6,7 @@ use App\Http\Requests\Api\V1\StoreTaskRequest;
 use App\Http\Requests\Api\V1\UpdateTaskRequest;
 use App\Models\Task;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\TaskResource;
 
 class TaskController extends Controller
 {
@@ -14,7 +15,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return TaskResource::collection(Task::paginate()->withQueryString());
     }
 
     /**
@@ -22,7 +23,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        return new TaskResource(Task::create($request->validated()));
     }
 
     /**
@@ -30,7 +31,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return $task;
+        return new TaskResource($task);
     }
 
     /**
@@ -38,7 +39,12 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->validated());
+        $task->completed_at = $task->completed ? now() : null;
+        $task->deleted_at = null;
+        $task->save();
+
+        return new TaskResource($task);
     }
 
     /**
@@ -46,6 +52,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->deleted_at = now();
+        $task->save();
     }
 }
