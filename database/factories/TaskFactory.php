@@ -18,19 +18,16 @@ class TaskFactory extends Factory
     {
         $completed = fake()->boolean();
         $subDays = rand(61, 365);
-        $createdAt = now()->subDays($subDays);
-        $upddateAt = now()->subDays($subDays - rand(2, 15));
-        $completedAt = $completed ? now()->subDays($subDays - (rand(16, 30))) : null;
-        $deletedAt = fake()->boolean(10) ? now()->subDays($subDays - rand(31, 60)) : null;
+
         return [
             'user' => fake()->name(),
-            'title' => fake()->sentence(),
-            'description' => fake()->paragraph(),
+            'title' => fake()->catchPhrase(),
+            'description' => fake()->realText(),
             'completed' => $completed,
-            'completed_at' => $completedAt,
-            'created_at' => $createdAt,
-            'updated_at' => $upddateAt,
-            'deleted_at' => $deletedAt,
+            'completed_at' => $completed ? now()->subDays($subDays - (rand(16, 30))) : null,
+            'created_at' => now()->subDays($subDays),
+            'updated_at' => now()->subDays($subDays - rand(2, 15)),
+            'deleted_at' =>  fake()->boolean(10) ? now()->subDays($subDays - rand(31, 60)) : null,
         ];
     }
 }
