@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+    app:
+        build:
+            args:
+                user: john
+                uid: 1000
+            context: ./
+            dockerfile: ./docker/Dockerfile
+        image: john-task-list
+        container_name: john-task-list-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        depends_on:
+            - db
+        volumes:
+            - ./:/var/www
+        networks:
+            - john-task-list
+    db:
+        image: mysql:8.0
+        container_name: john-task-list-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        ports:
+            - 33060:3306
+        networks:
+            - john-task-list
+    nginx:
+        image: nginx:1.17-alpine
+        container_name: john-task-list-nginx
+        restart: unless-stopped
+        ports:
+            - 8000:80
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/config:/etc/nginx/conf.d
+            - ./docker/nginx/log:/var/log/nginx
+        networks:
+            - john-task-list
+networks:
+    john-task-list:
+        driver: bridge
