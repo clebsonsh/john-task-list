@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('/tasks', TaskController::class);
+// api/v1
+Route::group(
+    [
+        'prefix' => 'v1',
+        'namespace' => 'App\Http\Controllers\Api\V1',
+    ],
+    function () {
+        Route::apiResources([
+            'tasks' => TaskController::class,
+        ]);
+    }
+);
