@@ -57,7 +57,6 @@ class TaskController extends Controller
     {
         $task->update($request->validated());
         $task->completed_at = $task->completed ? now() : null;
-        $task->deleted_at = null;
         $task->save();
 
         $task->attachments()->delete();
@@ -85,7 +84,6 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $task->deleted_at = now();
-        $task->save();
+        $task->delete();
     }
 }
