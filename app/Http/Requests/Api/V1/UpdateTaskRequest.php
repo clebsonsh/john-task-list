@@ -27,7 +27,7 @@ class UpdateTaskRequest extends FormRequest
             'description' => ['required', 'string', 'min:3', 'max:65535'],
             'completed' => ['required', 'boolean'],
             'attachments' => ['required', 'array', 'min:1'],
-            'attachments.*' => ['required', 'mimes:xml,txt,xlsx,xls,csv', 'max:1024'],
+            'attachments.*' => ['required', 'mimes:csv,txt,xlsx,xls,xml', 'max:1024'],
         ];
     }
 }
