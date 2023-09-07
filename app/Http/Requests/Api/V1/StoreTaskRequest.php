@@ -26,6 +26,8 @@ class StoreTaskRequest extends FormRequest
             'title' => ['required', 'string', 'unique:tasks,title,NULL,id,deleted_at,NULL', 'min:3', 'max:255'],
             'description' => ['required', 'string', 'min:3', 'max:65535'],
             'completed' => ['required', 'boolean'],
+            'attachments' => ['required', 'array', 'min:1'],
+            'attachments.*' => ['required', 'mimes:xml,txt,xlsx,xls,csv', 'max:1024'],
         ];
     }
 }

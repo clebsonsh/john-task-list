@@ -23,4 +23,9 @@ class Task extends Model
         'completed_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
 }

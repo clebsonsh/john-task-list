@@ -15,7 +15,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return TaskResource::collection(Task::paginate()->withQueryString());
+        return TaskResource::collection(Task::with('attachments')->paginate());
     }
 
     /**
@@ -23,7 +23,23 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        return new TaskResource(Task::create($request->validated()));
+        $task = Task::create($request->validated());
+        $files = $request->file('attachments');
+        $time = time();
+
+        foreach ($files as $file) {
+            $name = $file->getClientOriginalName();
+            $path = 'storage/' .  $file->storeAs('attachments/' . $task->id, $time . '_' . $name, 'public');
+
+            $task->attachments()->create([
+                'name' => $name,
+                'path' => $path,
+            ]);
+
+            $time++;
+        }
+
+        return new TaskResource($task->load('attachments'));
     }
 
     /**
@@ -31,7 +47,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return new TaskResource($task);
+        return new TaskResource($task->load('attachments'));
     }
 
     /**
@@ -44,7 +60,24 @@ class TaskController extends Controller
         $task->deleted_at = null;
         $task->save();
 
-        return new TaskResource($task);
+        $task->attachments()->delete();
+
+        $files = $request->file('attachments');
+        $time = time();
+
+        foreach ($files as $file) {
+            $name = $file->getClientOriginalName();
+            $path = 'storage/' .  $file->storeAs('attachments/' . $task->id, $time . '_' . $name, 'public');
+
+            $task->attachments()->create([
+                'name' => $name,
+                'path' => $path,
+            ]);
+
+            $time++;
+        }
+
+        return new TaskResource($task->load('attachments'));
     }
 
     /**
