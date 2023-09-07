@@ -62,7 +62,7 @@ tool that helps João to solve his problem in a simple way.
 
 > > `docker-compose exec app php artisan migrate:fresh --seed`
 
--   All done, your API is up and runnig at http://127.0.0.1:8000
+-   All done, our API is up and running at http://127.0.0.1:8000
 
 ## API deploy
 
@@ -70,4 +70,4 @@ tool that helps João to solve his problem in a simple way.
 
 ## Insomnia endpoints export
 
--   thre is a file called endpoints.json at the project root folder with all local and remote endpoints for testing.
+-   There is a file called `endpoints.json` at the project root folder with all local and remote endpoints for testing.
