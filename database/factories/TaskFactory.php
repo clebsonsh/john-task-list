@@ -27,7 +27,6 @@ class TaskFactory extends Factory
             'completed_at' => $completed ? now()->subDays($subDays - (rand(16, 30))) : null,
             'created_at' => now()->subDays($subDays),
             'updated_at' => now()->subDays($subDays - rand(2, 15)),
-            'deleted_at' =>  fake()->boolean(10) ? now()->subDays($subDays - rand(31, 60)) : null,
         ];
     }
 }
