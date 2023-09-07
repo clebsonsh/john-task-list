@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => ['message' => config('app.name')]);
+Route::get('/', fn () => ['message' => config('app.name'), 'go to' => route('tasks.index')]);
